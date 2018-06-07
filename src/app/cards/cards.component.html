@@ -1,0 +1,15 @@
+<mat-form-field>
+<input matInput [(ngModel)]="searchText" placeholder="Filter by author">
+</mat-form-field>
+
+<ng-container *ngIf="initialContentLoaded; else spinnerBig">
+  <button *ngIf="user_id" mat-raised-button color="primary"  (click)="onReturnToHome()">Return</button>
+  <div class="container" infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="300" (scrolled)="onScroll()">
+    <app-card *ngFor="let photo of photos | filter: searchText" [photo]="photo"></app-card>
+  </div>
+  <mat-spinner class="spinner-small" *ngIf="!showImages" [diameter]="60"></mat-spinner>
+</ng-container>
+
+<ng-template #spinnerBig>
+  <mat-spinner class="spinner-big" [diameter]="200"></mat-spinner>
+</ng-template>
