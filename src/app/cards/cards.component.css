@@ -11,6 +11,10 @@ app-card:hover{
   transition: all 0.3s ease;
 }
 
+app-card:hover > .mat-card {
+  background: lightgray;
+}
+
 .spinner-small {
   margin: 0 auto;
 }

@@ -16,6 +16,7 @@ export class HttpService {
       .set("method", "flickr.photos.search")
       .set("api_key", this.apiKey)
       .set("text", searchText)
+      .set("has_geo", '1')
       .set("per_page", per_page.toString())
       .set("page", page.toString())
       .set("format", this.format)

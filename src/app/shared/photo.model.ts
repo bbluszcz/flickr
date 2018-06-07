@@ -4,5 +4,7 @@ export interface Photo {
     owner_name: string;
     owner_id: string;
     date: Date;
+    region: string;
+    country: string;
     likes?: number;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpService } from "../http.service";
 import { Observable, Subscription, combineLatest, of } from "rxjs";
-import { map, mergeMap, mergeAll, toArray, catchError } from "rxjs/operators";
+import { map, mergeMap, mergeAll, toArray, catchError, tap } from "rxjs/operators";
 import { Photo } from "../shared/photo.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
@@ -45,6 +45,7 @@ export class CardsComponent implements OnInit, OnDestroy {
       this.search$ = this.httpService.getUserPhotosFlickr(user_id, per_page, page);
     }
     this.search$ = this.search$.pipe(
+      tap((r) => console.log(r)),
       map(response => response["photos"]["photo"]),
       mergeAll(),
       catchError(err => of(`Error: ${err}`))
@@ -70,6 +71,8 @@ export class CardsComponent implements OnInit, OnDestroy {
         const owner_name = response[1][i]["owner"]["username"];
         const owner_id = response[1][i]["owner"]["nsid"];
         const date = response[1][i]["dates"]["taken"];
+        const region = response[1][i]["location"]["region"]['_content'];
+        const country = response[1][i]["location"]["country"]['_content'];
         const likes = Math.floor(Math.random() * 10);
         this.photos.push({
           url: url,
@@ -77,7 +80,9 @@ export class CardsComponent implements OnInit, OnDestroy {
           owner_name: owner_name,
           owner_id: owner_id,
           likes: likes,
-          date: date
+          date: date,
+          region: region,
+          country: country,
         });
       });
       this.showImages = true;
@@ -85,7 +90,7 @@ export class CardsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private onScroll() {
+  public onScroll() {
     if (this.photos.length >= 100) {
       return;
     }
@@ -98,12 +103,8 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 }
 
-  private onReturnToHome() {
+  public onReturnToHome() {
     this.router.navigateByUrl('');
-  }
-
-  somethingChanged(event) {
-    console.log(event);
   }
 
   ngOnDestroy() {

@@ -8,12 +8,12 @@ import { Router } from "@angular/router";
   styleUrls: ['./card.component.css']
 })
 export class CardComponent {
-  isLiked: any;
+  private isLiked: boolean;
   @Input() photo: Photo;
 
   constructor(public router: Router) {}
 
-  onAuthorPhotos() {
+  public onAuthorPhotos() {
     this.router.navigate(['/user/' + this.photo.owner_id]);
   }
 
